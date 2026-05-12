@@ -66,12 +66,23 @@ ai-kigurumi-head-reference/
 
 本仓库包含一个无需构建步骤的静态前端：
 
-- `docs/index.html`
-- `docs/styles.css`
-- `docs/app.js`
-- `docs/assets/workflow-reference.jpeg`
+- `web/index.html`
+- `web/styles.css`
+- `web/app.js`
+- `web/assets/workflow-reference.jpeg`
 
-直接打开 `docs/index.html`，或在 GitHub 仓库的 **Settings → Pages** 中选择从当前分支的 `docs/` 目录发布即可使用。
+直接打开 `web/index.html` 即可本地使用。
+
+### GitHub Pages 部署
+
+本仓库包含 `.github/workflows/pages.yml`，会在推送到 `main` 分支时把 `web/` 目录发布到 GitHub Pages。
+
+首次使用时：
+
+1. 打开 GitHub 仓库的 **Settings → Pages**。
+2. 在 **Build and deployment** 中，将 **Source** 设置为 **GitHub Actions**。
+3. 推送到 `main` 分支，或在 **Actions → Deploy GitHub Pages** 中手动运行 workflow。
+4. 部署完成后，页面 URL 会显示在 workflow 的 `github-pages` environment 中。
 
 API Base URL 和 API Key 只会保存在用户浏览器本地，不会写入仓库。执行生成时，Key 会发送给用户配置的图像或文本 API 端点。若 API 服务不允许浏览器跨域请求，请在页面中填写一个兼容 OpenAI API 的、允许 CORS 的代理 Base URL。
 
