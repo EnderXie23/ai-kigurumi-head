@@ -2,8 +2,8 @@
 
 ## 0.2.0 - Frontend Workflow Studio / 前端工作台
 
-- Added a static GitHub Pages-ready frontend under `frontend/` for running the three-stage image workflow.  
-  在 `frontend/` 下新增可直接用于 GitHub Pages 的静态前端，用于执行三阶段图像工作流。
+- Added a static GitHub Pages-ready frontend under `docs/` for running the three-stage image workflow.  
+  在 `docs/` 下新增可直接用于 GitHub Pages 的静态前端，用于执行三阶段图像工作流。
 
 - Added bilingual UI, local-only API key settings, stage prompt presets, image result selection, and download actions.  
   新增中英文界面、本地保存 API Key 设置、阶段 Prompt 模板、结果图片选择和下载功能。
