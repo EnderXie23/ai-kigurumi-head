@@ -62,6 +62,19 @@ ai-kigurumi-head-reference/
 4. 按照 `prompts/step3-product-view.md` 生成商品照风格四面或八面视图。
 5. 如果结果不理想，参考 `prompts/troubleshooting.md` 修改 Prompt。
 
+## Web 前端
+
+本仓库包含一个无需构建步骤的静态前端：
+
+- `index.html`
+- `styles.css`
+- `app.js`
+- `assets/workflow-reference.jpeg`
+
+直接打开 `index.html`，或在 GitHub 仓库的 **Settings → Pages** 中选择从当前分支发布即可使用。
+
+API Base URL 和 API Key 只会保存在用户浏览器本地，不会写入仓库。执行生成时，Key 会发送给用户配置的图像或文本 API 端点。若 API 服务不允许浏览器跨域请求，请在页面中填写一个兼容 OpenAI API 的、允许 CORS 的代理 Base URL。
+
 ## 素材准备建议
 
 建议将素材分为以下几类：

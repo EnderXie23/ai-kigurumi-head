@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Kigurumi Head Workflow</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="topbar" aria-label="App controls">
+        <div class="brand">
+          <span class="brand-mark">AI</span>
+          <span data-i18n="brand">Kigurumi Head Studio</span>
+        </div>
+        <div class="toolbar">
+          <button class="icon-button" id="langToggle" type="button" title="Language">中 / EN</button>
+          <button class="ghost-button" id="clearLocal" type="button" data-i18n="clearLocal">Clear local data</button>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow" data-i18n="eyebrow">Three-stage image workflow</p>
+          <h1 data-i18n="headline">AI Kigurumi Head Reference Workflow</h1>
+          <p class="lede" data-i18n="lede">
+            Turn character references into clean head turnarounds, kigurumi shell designs, and product-style multi-view references.
+          </p>
+        </section>
+        <figure class="workflow-preview">
+          <img src="assets/workflow-reference.jpeg" alt="AI Kigurumi Head Reference Workflow" />
+        </figure>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel api-panel" aria-labelledby="api-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="apiEyebrow">Connection</p>
+            <h2 id="api-title" data-i18n="apiTitle">Image API settings</h2>
+          </div>
+          <span class="status-pill" id="apiStatus" data-i18n="apiStatusMissing">API key required</span>
+        </div>
+
+        <div class="form-grid">
+          <label>
+            <span data-i18n="apiBase">API base URL</span>
+            <input id="apiBase" type="url" placeholder="https://api.openai.com/v1" autocomplete="off" />
+          </label>
+          <label>
+            <span data-i18n="apiKey">API key</span>
+            <input id="apiKey" type="password" placeholder="sk-..." autocomplete="off" />
+          </label>
+          <label>
+            <span data-i18n="imageModel">Image model</span>
+            <input id="imageModel" type="text" value="gpt-image-2" />
+          </label>
+          <label>
+            <span data-i18n="size">Output size</span>
+            <select id="imageSize">
+              <option value="1024x1024">1024 x 1024</option>
+              <option value="1024x1536">1024 x 1536</option>
+              <option value="1536x1024">1536 x 1024</option>
+              <option value="auto">Auto</option>
+            </select>
+          </label>
+          <label>
+            <span data-i18n="count">Number</span>
+            <input id="imageCount" type="number" min="1" max="4" value="1" />
+          </label>
+          <label>
+            <span data-i18n="quality">Quality</span>
+            <select id="imageQuality">
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+              <option value="auto">Auto</option>
+            </select>
+          </label>
+        </div>
+
+        <p class="notice" data-i18n="privacyNotice">
+          Your API base URL and keys are stored only in this browser. They are never written into this GitHub repository or made public. When you run a stage, the key is sent only to the API endpoint you configured.
+        </p>
+      </section>
+
+      <section class="pipeline" id="pipeline" aria-label="Pipeline stages"></section>
+
+      <section class="panel prompt-helper" aria-labelledby="helper-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="helperEyebrow">Troubleshooting</p>
+            <h2 id="helper-title" data-i18n="helperTitle">Auto-prompt generator</h2>
+          </div>
+        </div>
+
+        <div class="form-grid helper-grid">
+          <label>
+            <span data-i18n="textApiBase">Text API base URL</span>
+            <input id="textApiBase" type="url" placeholder="Use image API base if empty" autocomplete="off" />
+          </label>
+          <label>
+            <span data-i18n="textApiKey">Text API key</span>
+            <input id="textApiKey" type="password" placeholder="Use image API key if empty" autocomplete="off" />
+          </label>
+          <label>
+            <span data-i18n="textModel">Text model</span>
+            <input id="textModel" type="text" value="gpt-4.1-mini" />
+          </label>
+          <label>
+            <span data-i18n="helperStage">Stage</span>
+            <select id="helperStage">
+              <option value="1">Step 1</option>
+              <option value="2">Step 2</option>
+              <option value="3">Step 3</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="helper-fields">
+          <label>
+            <span data-i18n="refsUsed">Reference images and roles</span>
+            <textarea id="helperRefs" rows="3" data-i18n-placeholder="refsPlaceholder"></textarea>
+          </label>
+          <label>
+            <span data-i18n="currentPrompt">Current prompt</span>
+            <textarea id="helperPrompt" rows="5"></textarea>
+          </label>
+          <label>
+            <span data-i18n="whatWorked">What is correct and should be kept</span>
+            <textarea id="helperKeep" rows="3"></textarea>
+          </label>
+          <label>
+            <span data-i18n="whatFailed">What is wrong and should be fixed</span>
+            <textarea id="helperFix" rows="3"></textarea>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button class="primary-button" id="generatePrompt" type="button" data-i18n="generatePrompt">Generate stronger prompt</button>
+          <button class="ghost-button" id="copyHelperPrompt" type="button" data-i18n="copy">Copy</button>
+        </div>
+        <textarea id="helperOutput" class="output-prompt" rows="8" readonly></textarea>
+      </section>
+    </main>
+
+    <template id="stageTemplate">
+      <article class="stage panel">
+        <div class="stage-head">
+          <div class="stage-number"></div>
+          <div>
+            <p class="eyebrow stage-kicker"></p>
+            <h2 class="stage-title"></h2>
+          </div>
+        </div>
+
+        <div class="stage-layout">
+          <section class="stage-control">
+            <label>
+              <span data-i18n="promptPreset">Prompt preset</span>
+              <select class="preset-select"></select>
+            </label>
+            <label>
+              <span data-i18n="uploadRefs">Upload reference images</span>
+              <input class="file-input" type="file" accept="image/*" multiple />
+            </label>
+            <label class="carry-row">
+              <input class="carry-prev" type="checkbox" checked />
+              <span data-i18n="includePrev">Include selected image from previous stage</span>
+            </label>
+            <label class="carry-row">
+              <input class="carry-current" type="checkbox" />
+              <span data-i18n="includeCurrent">Include selected image from this stage for refinement</span>
+            </label>
+            <label>
+              <span data-i18n="details">Detailed modification notes</span>
+              <textarea class="detail-input" rows="4" data-i18n-placeholder="detailsPlaceholder"></textarea>
+            </label>
+            <label>
+              <span data-i18n="prompt">Prompt</span>
+              <textarea class="prompt-input" rows="12"></textarea>
+            </label>
+            <div class="actions">
+              <button class="primary-button run-stage" type="button" data-i18n="runStage">Run stage</button>
+              <button class="ghost-button copy-stage" type="button" data-i18n="copyPrompt">Copy prompt</button>
+            </div>
+            <p class="stage-status"></p>
+          </section>
+
+          <section class="stage-results">
+            <div class="result-grid"></div>
+          </section>
+        </div>
+      </article>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
